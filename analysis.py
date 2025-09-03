@@ -45,61 +45,27 @@ def fit_predict_eval(model, features_train, features_test, target_train, target_
 
 
 def main():
-    """# Print overview of the data
-    print(f"x_train shape: {x_train.shape}")
-    print(f"x_test shape: {x_test.shape}")
-    print(f"y_train shape: {y_train.shape}")
-    print(f"y_test shape: {y_test.shape}")
-    print("Proportion of samples per class in train set:")
-    print(pd.Series(y_train).value_counts(normalize=True))"""
 
-    # Create a dictionary to hold the scores for each model
+    # Dictionary of models
+    models = [
+        KNeighborsClassifier(),
+        DecisionTreeClassifier(random_state=40),
+        LogisticRegression(random_state=40, max_iter=1000),
+        RandomForestClassifier(random_state=40)
+    ]
+
+    # Create a dictionary to hold the accuracy scores for each model
     scores = {}
 
-    # K-nearest Neighbors
-    fit_predict_eval(
-        model=KNeighborsClassifier(),
-        features_train=x_train,
-        features_test=x_test,
-        target_train=y_train,
-        target_test=y_test,
-        scores_dict=scores
-    )
-
-    # Decision Tree
-    fit_predict_eval(
-        model=DecisionTreeClassifier(random_state=40),
-        features_train=x_train,
-        features_test=x_test,
-        target_train=y_train,
-        target_test=y_test,
-        scores_dict=scores
-    )
-
-    # Logistic Regression
-    fit_predict_eval(
-        model=LogisticRegression(),
-        features_train=x_train,
-        features_test=x_test,
-        target_train=y_train,
-        target_test=y_test,
-        scores_dict=scores
-    )
-
-    # Random Forest
-    fit_predict_eval(
-        model=RandomForestClassifier(random_state=40),
-        features_train=x_train,
-        features_test=x_test,
-        target_train=y_train,
-        target_test=y_test,
-        scores_dict=scores
-    )
+    # Evaluate each model
+    for model in models:
+        fit_predict_eval(model, x_train, x_test, y_train, y_test, scores)
 
     # Find the maximum score
     max_score = max(scores.values())
 
     # Find the model with the maximum score
+
     best_model = max(scores, key=scores.get)
 
     # Final message
