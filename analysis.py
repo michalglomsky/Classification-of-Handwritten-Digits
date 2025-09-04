@@ -59,17 +59,31 @@ def main():
     ]
 
     # Evaluate each model with normalized data and store scores
-    # Dictionary for accuracy scores of normalized data
-    scores_norm = {}
+    # Dictionaries for accuracy scores of non-normalized and normalized data
+    scores, scores_norm = {}, {}
 
+    print("Non-normalized data scores:\n")
+    for model in models:
+        fit_predict_eval(model, x_train, x_test, y_train, y_test, scores)
+
+    print("Normalized data scores:\n")
     for model in models:
         fit_predict_eval(model, x_train_norm, x_test_norm, y_train, y_test, scores_norm)
 
+    # Check whether normalization have a net positive impact on the accuracy scores
+    comparison = 0
+    for score, score_norm in scores, scores_norm:
+        comparison += score_norm-score
+        
     # Final message - Q1: Does the normalization have a positive impact in general? (yes/no)
-    print(f"\nThe answer to the 1st question: yes")
+    if comparison > 0:
+        print(f"\nThe answer to the 1st question: yes")
+    else:
+        print(f"\nThe answer to the 1st question: no")
 
     # Q2: Which two models show the best scores? Round the result to the third decimal
     #     place and print the accuracy of models in descending order.
+
     # Sort the normalized scores dictionary in descending order
     sorted_scores_norm = sorted(scores_norm.items(), key=lambda item: item[1], reverse=True)
     print(f"The answer to the 2nd question: {sorted_scores_norm[0][0]}-{round(sorted_scores_norm[0][1], 3)}, {sorted_scores_norm[1][0]}-{round(sorted_scores_norm[1][1], 3)}")
